@@ -1,13 +1,12 @@
-# import os
 import sys
 import argparse
 import requests
-# from HTMLParser import HTMLParser
-# from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import re
 
 
 def scraper(url):
+    """ scrapes a website for urls, phone numbers and emails."""
     url_list = ['URLS']
     phone_numbers = ['PHONE_NUMBERS']
     emails = []
@@ -50,6 +49,19 @@ def scraper(url):
     print(''.join(emails))
 
 
+def soup(url):
+    r = requests.get(url)
+    f = r.text
+    soup = BeautifulSoup(f, 'html.parser')
+    print "\n HREF urls \n"
+    for link in set(soup.find_all('a')):
+    
+        print(link.get('href'))
+    print " \n Img urls \n"
+    for link in set(soup.find_all('img')):
+        print(link.get('src'))
+
+
 def create_parser():
     """Create an argument parser object"""
     parser = argparse.ArgumentParser()
@@ -71,7 +83,8 @@ def main(args):
     parsed_args = parser.parse_args(args)
     url = parsed_args.url
     if url:
-        scraper(url)
+        # scraper(url)
+        soup(url)
 
 
 if __name__ == '__main__':
